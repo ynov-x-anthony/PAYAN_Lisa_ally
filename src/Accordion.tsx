@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useId } from 'react'
 
 type Props = { title: string; children: React.ReactNode }
 
@@ -8,13 +8,14 @@ type Props = { title: string; children: React.ReactNode }
 
 export default function Accordion({ title, children }: Props) {
   const [expanded, setExpanded] = useState(false)
+  const panelId = useId()
 
   return (
     <div className="accordion">
-      <button className="accordion-trigger" onClick={() => setExpanded(!expanded)}>
+      <button type="button" aria-expanded={expanded} aria-controls={panelId} className="accordion-trigger" onClick={() => setExpanded(!expanded)}>
         {title} {expanded ? '▲' : '▼'}
       </button>
-      {expanded && <div className="accordion-panel">{children}</div>}
+      {expanded && <div className="accordion-panel" id={panelId} hidden={!expanded}>{children}</div>}
     </div>
   )
 }
